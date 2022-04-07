@@ -65,7 +65,7 @@ exclude_patterns = ["**.ipynb_checkpoints"]
 # a list of builtin themes.
 #
 html_theme = 'pydata_sphinx_theme'
-html_logo = os.path.abspath('_images/sepal.png') 
+html_logo = os.path.abspath('_images/sepal.png')
 html_favicon = os.path.abspath('_images/favicon.ico')
 html_last_updated_fmt = ''
 html_sidebars = {
@@ -160,9 +160,9 @@ with module_json.open() as json_file:
     module_list = json.load(json_file)
 
 for name in module_list:
-    
+
     dst = dwn_dir / f'{name}.rst'
-    
+
     file = module_list[name].pop("url", no_module_url)
     if file != no_module_url: 
         urlretrieve (file, dst)
@@ -171,42 +171,42 @@ for name in module_list:
         txt = dst.read_text()
         txt = txt.replace("Module_name", name).replace("=", "="*len(name))
         dst.write_text(txt)
-        
+
     with dst.open("a") as f: 
         f.writelines(["", f".. custom-edit:: {file}"])
-        
+
     # create a tag stub file 
     tag = module_list[name].pop("tag", "other")
     tag_file = module_dir/f"{tag}.rst"
-    
+
     if not tag_file.is_file():
         copy(tag_template, tag_file)
         txt = tag_file.read_text()
         txt = txt.replace("module_tag", tag).replace("=", "="*len(tag))
         tag_file.write_text(txt)
-        
+
         with module_index.open("a") as f:
             f.write(f"\n    {tag}")
-            
+
     with tag_file.open('a') as f:
         f.write(f"\n    dwn/{name}")
-        
+
     # prompt for the readthedoc build
     print(f"{name} documentation have been copied to the dwn folder")
-    
+
 #  -- copy the requirements of the R and Python environment to data ------------
 
 data_dir = source_dir/"data"
 
 # R environment
-print(f"copy R packages from to data folder")
+print("copy R packages from to data folder")
 urlretrieve (
     "https://raw.githubusercontent.com/openforis/sepal/master/modules/geospatial-toolkit/script/init_r_packages.sh", 
     data_dir/"r_packages.sh"
 )
 
 # Python environment
-print(f"copy Python libs from to data folder")
+print("copy Python libs from to data folder")
 urlretrieve (
     "https://raw.githubusercontent.com/openforis/sepal/master/modules/geospatial-toolkit/config/requirements.txt", 
     data_dir/"python_lib.txt"
